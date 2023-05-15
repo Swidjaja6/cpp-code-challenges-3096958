@@ -19,9 +19,55 @@
 //           v: A reference to the vector to analyze.
 // Returns: A boolean value: True for bitonic sequences, false otherwise.
 bool is_bitonic(const std::vector<int> &v){
+    int count = v.size();
+    if(count <= 2) 
+        return true;
     
-    // Write your code here
+    bool rise = false;
+    int i = 0;
 
+    while(i < (count - 1) && v[i] == v[i + 1]) 
+        i++;
+    if(i == (count - 1))
+        return true;
+    
+    if(v[i] < v[i + 1])
+        while(i < (count - 1) && v[i] <= v[i + 1])
+            i++;
+    else
+        while(i < (count - 1) && v[i] >= v[i + 1])
+            i++;
+
+    if(i == (count - 1))
+        return true; // Monotonic
+
+    // Second slope
+    if(v[i] < v[i + 1])
+        while(i < (count - 1) && v[i] <= v[i + 1])
+            i++;
+    else
+        while(i < (count - 1) && v[i] >= v[i + 1])
+            i++;
+
+    if(i == (count - 1))
+        return true; // Bitonic
+
+    //Third slope 
+    if(v[i] < v[i + 1]) {
+        rise = true;
+        while(i < (count - 1) && v[i] <= v[i + 1])
+            i++;
+    }
+    else {
+        rise = false;
+        while(i < (count - 1) && v[i] >= v[i + 1])
+            i++;
+    }
+    if(i < (count - 1))
+        return false; // Not bitonic
+
+    if((rise && v[0] >= v[i]) || (!rise && v[0] <= v[i]))
+        return true;
     return false;
 }
 
@@ -29,7 +75,7 @@ bool is_bitonic(const std::vector<int> &v){
 int main(){
     // Uncomment one of these lines and make sure you get the result at the right. 
     
-    std::vector<int> myvec = {1, 2, 5, 4, 3};  // Yes
+    // std::vector<int> myvec = {1, 2, 5, 4, 3};  // Yes
     // std::vector<int> myvec = {1, 1, 1, 1, 1};  // Yes
     // std::vector<int> myvec = {3, 4, 5, 2, 2};  // Yes
     // std::vector<int> myvec = {3, 4, 5, 2, 4};  // No
